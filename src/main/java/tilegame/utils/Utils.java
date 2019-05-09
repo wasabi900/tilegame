@@ -7,15 +7,15 @@ import java.io.IOException;
 
 public class Utils {
 
-    public static String loadFileAsString(String path){
+    public static String loadFileAsString(String path) {
         StringBuilder builder = new StringBuilder();
-        try{
-           BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(path)));
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
             String line;
-            while((line = bufferedReader.readLine()) != null)
+            while ((line = bufferedReader.readLine()) != null)
                 builder.append(line + "\n");
             bufferedReader.close();
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -23,12 +23,13 @@ public class Utils {
         return builder.toString();
     }
 
-    public static int parseInt(String number){
-        try{
+    public static int parseInt(String number) {
+        try {
             return Integer.parseInt(number);
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             e.printStackTrace();
             return 0;
         }
     }
 }
+

@@ -2,6 +2,7 @@ package tilegame;
 
 import tilegame.display.Display;
 import tilegame.gfx.Assets;
+import tilegame.gfx.GameCamera;
 import tilegame.input.KeyManager;
 import tilegame.states.GameState;
 import tilegame.states.MenuState;
@@ -14,7 +15,7 @@ import java.awt.image.BufferStrategy;
 public class Game implements Runnable {
 
     private Display display;
-    public int width,height;
+    private int width,height;
     public String title;
 
     private boolean running;
@@ -31,6 +32,13 @@ public class Game implements Runnable {
     //Input
     private KeyManager keyManager;
 
+    //Camera
+    private GameCamera gameCamera;
+
+    //Handler
+
+    private Handler handler;
+
     public Game(String title, int width, int height) {
         this.width = width;
         this.height = height;
@@ -44,9 +52,12 @@ public class Game implements Runnable {
         display.getFrame().addKeyListener(keyManager);
         Assets.init();
 
-        gameState = new GameState(this);
-        menuState = new MenuState(this);
-        settingsState = new SettingsState(this);
+        gameCamera = new GameCamera(this,0,0);
+        handler = new Handler(this);
+
+        gameState = new GameState(handler);
+        menuState = new MenuState(handler);
+        settingsState = new SettingsState(handler);
 
         State.setCurrentState(gameState);
     }
@@ -123,8 +134,38 @@ public class Game implements Runnable {
         stop();
     }
 
+
+
     public KeyManager getKeyManager() {
         return keyManager;
+    }
+
+    public void setKeyManager(KeyManager keyManager) {
+        this.keyManager = keyManager;
+    }
+
+    public GameCamera getGameCamera() {
+        return gameCamera;
+    }
+
+    public void setGameCamera(GameCamera gameCamera) {
+        this.gameCamera = gameCamera;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     /**
