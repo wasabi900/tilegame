@@ -4,6 +4,7 @@ import tilegame.display.Display;
 import tilegame.gfx.Assets;
 import tilegame.gfx.GameCamera;
 import tilegame.input.KeyManager;
+import tilegame.input.MouseManager;
 import tilegame.states.GameState;
 import tilegame.states.MenuState;
 import tilegame.states.SettingsState;
@@ -25,12 +26,13 @@ public class Game implements Runnable {
     private Graphics graphics;
 
     //States
-    private State gameState;
-    private State menuState;
+    public State gameState;
+    public State menuState;
     private State settingsState;
 
     //Input
     private KeyManager keyManager;
+    private MouseManager mouseManager;
 
     //Camera
     private GameCamera gameCamera;
@@ -44,29 +46,34 @@ public class Game implements Runnable {
         this.height = height;
         this.title = title;
         keyManager = new KeyManager();
+        mouseManager = new MouseManager();
     }
 
 
     private void init(){
         display = new Display(title, width, height);
         display.getFrame().addKeyListener(keyManager);
+        display.getFrame().addMouseListener(mouseManager);
+        display.getFrame().addMouseMotionListener(mouseManager);
+        display.getCanvas().addMouseListener(mouseManager);
+        display.getCanvas().addMouseMotionListener(mouseManager);
         Assets.init();
 
-        gameCamera = new GameCamera(this,0,0);
         handler = new Handler(this);
+        gameCamera = new GameCamera(handler,0,0);
 
         gameState = new GameState(handler);
         menuState = new MenuState(handler);
         settingsState = new SettingsState(handler);
 
-        State.setCurrentState(gameState);
+        State.setState(menuState);
     }
 
 
     private void tick(){
         keyManager.tick();
-        if(State.getCurrentState() != null){
-            State.getCurrentState().tick();
+        if(State.getState() != null){
+            State.getState().tick();
         }
     }
     private void render(){
@@ -82,8 +89,8 @@ public class Game implements Runnable {
         graphics.clearRect(0,0,width,height);
 
         //rajzolunk
-        if(State.getCurrentState() != null){
-            State.getCurrentState().render(graphics);
+        if(State.getState() != null){
+            State.getState().render(graphics);
         }
 
         bufferStrategy.show();
@@ -138,6 +145,9 @@ public class Game implements Runnable {
 
     public KeyManager getKeyManager() {
         return keyManager;
+    }
+    public MouseManager getMouseManager(){
+        return mouseManager;
     }
 
     public void setKeyManager(KeyManager keyManager) {

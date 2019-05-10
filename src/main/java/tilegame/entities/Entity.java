@@ -1,6 +1,5 @@
 package tilegame.entities;
 
-import tilegame.Game;
 import tilegame.Handler;
 
 import java.awt.*;
@@ -12,6 +11,7 @@ public abstract class Entity {
     protected float y;
     protected int width;
     protected int height;
+    protected Rectangle bounds;
 
     public Entity(Handler handler ,float x, float y, int width, int height) {
         this.handler = handler;
@@ -19,10 +19,26 @@ public abstract class Entity {
         this.y = y;
         this.width = width;
         this.height = height;
+
+        bounds = new Rectangle(0,0,width,height);
     }
 
     public abstract void tick();
     public abstract void render(Graphics graphics);
+
+    public boolean checkEntitiyCollisions(float xOffset,float yOffset){
+        for(Entity e : handler.getWorld().getEntityManager().getEntities()){
+            if(e.equals(this))
+                continue;
+            if(e.getColliosionBounds(0f,0f).intersects(getColliosionBounds(xOffset,yOffset)))
+                return true;
+        }
+        return false;
+    }
+
+    public Rectangle getColliosionBounds(float xOffset, float yOffset){
+        return new Rectangle((int)(x+bounds.x + xOffset),(int)(y+bounds.y + yOffset),bounds.width,bounds.height);
+    }
 
     public float getX() {
         return x;
