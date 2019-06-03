@@ -31,12 +31,12 @@ public class EntityManager {
 
     public void tick(){
         Iterator<Entity> it = entities.iterator();
-       while(it.hasNext()){
+        while(it.hasNext()){
             Entity e = it.next();
             e.tick();
             if(!e.isActive())
                 it.remove();
-       }
+        }
         entities.sort(renderSorter);
     }
 
@@ -44,6 +44,7 @@ public class EntityManager {
         for(Entity e : entities){
             e.render(g);
         }
+        player.postRender(g);
     }
 
     public void addEntity(Entity e){

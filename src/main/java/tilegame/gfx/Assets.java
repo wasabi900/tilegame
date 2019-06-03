@@ -1,20 +1,31 @@
 package tilegame.gfx;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+
 public class Assets {
 
     private static final int width = 32, height = 32;
+
+    public static Font font28;
 
     public static BufferedImage dirt, grass, stone, tree, rock;
     public static BufferedImage wood;
     public static BufferedImage[] player_down, player_up, player_left, player_right;
     public static BufferedImage[] zombie_down, zombie_up, zombie_left, zombie_right;
     public static BufferedImage[] btn_start;
+    public static BufferedImage inventoryScreen;
 
     public static void init(){
+        String filePath = new File("").getAbsolutePath();
+        font28 = FontLoader.loadFont(filePath + "\\src\\main\\resources\\fonts\\slkscr.ttf", 28);
+
         SpriteSheet sheet = new SpriteSheet(ImageLoader.loadImage("/textures/sheet.png"));
 
-        wood = sheet.crop(width,height,width,height);
+        inventoryScreen = ImageLoader.loadImage("/textures/inventoryScreen.png");
+
+        wood = sheet.crop(width, height, width, height);
 
         btn_start = new BufferedImage[2];
         btn_start[0] = sheet.crop(width * 6, height * 4, width * 2, height);
